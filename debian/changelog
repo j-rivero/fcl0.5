@@ -1,0 +1,19 @@
+fcl (0.2.9-0~ppa3~saucy1) saucy; urgency=high
+
+  * Fix dependencies for -dev package and include pkg-config
+
+ -- Jose Luis Rivero <jrivero@osrfoundation.org>  Thu, 22 Aug 2013 16:23:00 -0700
+
+fcl (0.2.9-0~ppa2~precise1) precise; urgency=high
+
+  * Define proper soname in library
+  * Change package name libfcl -> libfcl0
+
+ -- Jose Luis Rivero <jrivero@osrfoundation.org>  Thu, 22 Aug 2013 16:23:00 -0700
+
+fcl (0.2.9-0~ppa1~precise1) precise; urgency=high
+
+  * Release 0.2.9
+
+ -- Jose Luis Rivero <jrivero@osrfoundation.org>  Thu, 22 Aug 2013 16:23:00 -0700
+

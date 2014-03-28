@@ -1,0 +1,75 @@
+Source: fcl
+Maintainer: Debian Science Maintainers <debian-science-maintainers@lists.alioth.debian.org>
+Uploaders: Jose Luis Rivero <jrivero@osrfoundation.org>
+Uploaders: Leopold Palomo-Avellaneda <leo@alaxarxa.net>
+Standards-Version: 3.9.5
+Section: science
+Priority: extra
+Build-Depends: debhelper (>= 9), 
+               cmake,
+               pkg-config,
+               libboost-date-time-dev,
+               libboost-filesystem-dev,
+               libboost-system-dev,
+               libboost-thread-dev,
+               libboost-test-dev,
+               libccd-dev,
+               libtinyxml-dev,
+               libflann-dev
+Vcs-Browser: http://anonscm.debian.org/gitweb/?p=debian-science/packages/fcl.git
+Vcs-Git: git://anonscm.debian.org/debian-science/packages/fcl.git
+Homepage: http://gamma.cs.unc.edu/FCL/
+
+Package: libfcl0
+Section: libs
+Architecture: any
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Flexible Collision Library - shared library
+ FCL is a collision and proximity library that integrates several techniques for
+ fast and accurate collision checking and proximity computation. Tje library is
+ based on hierarchical representations and designed to perform multiple
+ proximity queries on different model representations. The set of queries
+ includes discrete collision detection, continuous collision detection,
+ separation distance computation and penetration depth estimation. The input
+ models may correspond to triangulated rigid or deformable models and
+ articulated models.
+
+Package: libfcl-dev
+Architecture: any
+Section: libdevel
+Depends: pkg-config,
+         libboost-date-time-dev,
+         libboost-filesystem-dev,
+         libboost-system-dev,
+         libboost-thread-dev,
+         libboost-test-dev,
+         libccd-dev,
+         libtinyxml-dev,
+         libflann-dev,
+	 libfcl0 (= ${binary:Version}),
+	 ${misc:Depends}
+Description: Flexible Collision Library - development files
+ FCL is a collision and proximity library that integrates several techniques for
+ fast and accurate collision checking and proximity computation. Tje library is
+ based on hierarchical representations and designed to perform multiple
+ proximity queries on different model representations. The set of queries
+ includes discrete collision detection, continuous collision detection,
+ separation distance computation and penetration depth estimation. The input
+ models may correspond to triangulated rigid or deformable models and
+ articulated models.
+
+Package: libfcl0-dbg
+Architecture: any
+Section: debug
+Depends: libfcl0 (= ${binary:Version}),
+         ${misc:Depends}
+Description: Flexible Collision Library - debug files
+ FCL is a collision and proximity library that integrates several techniques for
+ fast and accurate collision checking and proximity computation. Tje library is
+ based on hierarchical representations and designed to perform multiple
+ proximity queries on different model representations. The set of queries
+ includes discrete collision detection, continuous collision detection,
+ separation distance computation and penetration depth estimation. The input
+ models may correspond to triangulated rigid or deformable models and
+ articulated models.
