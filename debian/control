@@ -1,7 +1,6 @@
 Source: fcl
 Maintainer: Debian Science Maintainers <debian-science-maintainers@lists.alioth.debian.org>
-Uploaders: Jose Luis Rivero <jrivero@osrfoundation.org>
-Uploaders: Leopold Palomo-Avellaneda <leo@alaxarxa.net>
+Uploaders: Jose Luis Rivero <jrivero@osrfoundation.org>, Leopold Palomo-Avellaneda <leo@alaxarxa.net>
 Standards-Version: 3.9.5
 Section: science
 Priority: extra
