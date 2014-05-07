@@ -1,2 +1,3 @@
 0001-no-rpath-in-libs.patch
 0002-define-proper-soname.patch
+0003-fix-simplex-libccd.patch
