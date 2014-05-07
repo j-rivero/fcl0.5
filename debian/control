@@ -18,6 +18,7 @@ Build-Depends: debhelper (>= 9),
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=debian-science/packages/fcl.git
 Vcs-Git: git://anonscm.debian.org/debian-science/packages/fcl.git
 Homepage: http://gamma.cs.unc.edu/FCL/
+XS-Testsuite: autopkgtest
 
 Package: libfcl0
 Section: libs
