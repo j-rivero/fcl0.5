@@ -3,7 +3,7 @@ Maintainer: Debian Science Maintainers <debian-science-maintainers@lists.alioth.
 Uploaders: Jose Luis Rivero <jrivero@osrfoundation.org>, Leopold Palomo-Avellaneda <leo@alaxarxa.net>
 Standards-Version: 3.9.5
 Section: science
-Priority: extra
+Priority: optional
 Build-Depends: debhelper (>= 9), 
                cmake,
                pkg-config,
@@ -62,6 +62,7 @@ Description: Flexible Collision Library - development files
 Package: libfcl0-dbg
 Architecture: any
 Section: debug
+Priority: extra
 Depends: libfcl0 (= ${binary:Version}),
          ${misc:Depends}
 Description: Flexible Collision Library - debug files
