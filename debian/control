@@ -4,6 +4,7 @@ Uploaders: Jose Luis Rivero <jrivero@osrfoundation.org>, Leopold Palomo-Avellane
 Standards-Version: 3.9.5
 Section: science
 Priority: optional
+Testsuite: autopkgtest
 Build-Depends: debhelper (>= 9), 
                cmake,
                pkg-config,
