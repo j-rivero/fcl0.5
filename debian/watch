@@ -1,0 +1,3 @@
+version=3
+opts=dversionmangle=s/\+dfsg// \
+     https://github.com/flexible-collision-library/fcl/tags .*/v?(\d\S*)\.tar\.gz
