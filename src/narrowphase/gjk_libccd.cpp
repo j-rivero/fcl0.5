@@ -1,7 +1,8 @@
 /*
  * Software License Agreement (BSD License)
  *
- *  Copyright (c) 2011, Willow Garage, Inc.
+ *  Copyright (c) 2011-2014, Willow Garage, Inc.
+ *  Copyright (c) 2014-2015, Open Source Robotics Foundation
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -14,7 +15,7 @@
  *     copyright notice, this list of conditions and the following
  *     disclaimer in the documentation and/or other materials provided
  *     with the distribution.
- *   * Neither the name of Willow Garage, Inc. nor the names of its
+ *   * Neither the name of Open Source Robotics Foundation nor the names of its
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
  *
@@ -75,6 +76,11 @@ struct ccd_cone_t : public ccd_obj_t
 struct ccd_sphere_t : public ccd_obj_t
 {
   ccd_real_t radius;
+};
+
+struct ccd_ellipsoid_t : public ccd_obj_t
+{
+  ccd_real_t radii[3];
 };
 
 struct ccd_convex_t : public ccd_obj_t
@@ -547,6 +553,14 @@ static void sphereToGJK(const Sphere& s, const Transform3f& tf, ccd_sphere_t* sp
   sph->radius = s.radius;
 }
 
+static void ellipsoidToGJK(const Ellipsoid& s, const Transform3f& tf, ccd_ellipsoid_t* ellipsoid)
+{
+  shapeToGJK(s, tf, ellipsoid);
+  ellipsoid->radii[0] = s.radii[0];
+  ellipsoid->radii[1] = s.radii[1];
+  ellipsoid->radii[2] = s.radii[2];
+}
+
 static void convexToGJK(const Convex& s, const Transform3f& tf, ccd_convex_t* conv)
 {
   shapeToGJK(s, tf, conv);
@@ -669,6 +683,30 @@ static void supportSphere(const void* obj, const ccd_vec3_t* dir_, ccd_vec3_t* v
   ccdVec3Add(v, &s->pos);
 }
 
+static void supportEllipsoid(const void* obj, const ccd_vec3_t* dir_, ccd_vec3_t* v)
+{
+  const ccd_ellipsoid_t* s = static_cast<const ccd_ellipsoid_t*>(obj);
+  ccd_vec3_t dir;
+
+  ccdVec3Copy(&dir, dir_);
+  ccdQuatRotVec(&dir, &s->rot_inv);
+
+  ccd_vec3_t abc2;
+  abc2.v[0] = s->radii[0] * s->radii[0];
+  abc2.v[1] = s->radii[1] * s->radii[1];
+  abc2.v[2] = s->radii[2] * s->radii[2];
+
+  v->v[0] = abc2.v[0] * dir.v[0];
+  v->v[1] = abc2.v[1] * dir.v[1];
+  v->v[2] = abc2.v[2] * dir.v[2];
+
+  ccdVec3Scale(v, CCD_ONE / CCD_SQRT(ccdVec3Dot(v, &dir)));
+
+  // transform support vertex
+  ccdQuatRotVec(v, &s->rot);
+  ccdVec3Add(v, &s->pos);
+}
+
 static void supportConvex(const void* obj, const ccd_vec3_t* dir_, ccd_vec3_t* v)
 {
   const ccd_convex_t* c = (const ccd_convex_t*)obj;
@@ -775,13 +813,13 @@ bool GJKCollide(void* obj1, ccd_support_fn supp1, ccd_center_fn cen1,
   }
 
 
-  /// libccd returns dir and pos in world space and dir is pointing from object 2 to object 1
+  /// libccd returns dir and pos in world space and dir is pointing from object 1 to object 2
   res = ccdMPRPenetration(obj1, obj2, &ccd, &depth, &dir, &pos);
   if(res == 0)
   {
     contact_points->setValue(ccdVec3X(&pos), ccdVec3Y(&pos), ccdVec3Z(&pos));
     *penetration_depth = depth;
-    normal->setValue(-ccdVec3X(&dir), -ccdVec3Y(&dir), -ccdVec3Z(&dir));
+    normal->setValue(ccdVec3X(&dir), ccdVec3Y(&dir), ccdVec3Z(&dir));
 
     return true;
   }
@@ -864,6 +902,29 @@ void* GJKInitializer<Sphere>::createGJKObject(const Sphere& s, const Transform3f
 void GJKInitializer<Sphere>::deleteGJKObject(void* o_)
 {
   ccd_sphere_t* o = static_cast<ccd_sphere_t*>(o_);
+  delete o;
+}
+
+GJKSupportFunction GJKInitializer<Ellipsoid>::getSupportFunction()
+{
+  return &supportEllipsoid;
+}
+
+GJKCenterFunction GJKInitializer<Ellipsoid>::getCenterFunction()
+{
+  return &centerShape;
+}
+
+void* GJKInitializer<Ellipsoid>::createGJKObject(const Ellipsoid& s, const Transform3f& tf)
+{
+  ccd_ellipsoid_t* o = new ccd_ellipsoid_t;
+  ellipsoidToGJK(s, tf, o);
+  return o;
+}
+
+void GJKInitializer<Ellipsoid>::deleteGJKObject(void* o_)
+{
+  ccd_ellipsoid_t* o = static_cast<ccd_ellipsoid_t*>(o_);
   delete o;
 }
 

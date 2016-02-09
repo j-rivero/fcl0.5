@@ -1,7 +1,8 @@
 /*
  * Software License Agreement (BSD License)
  *
- *  Copyright (c) 2011, Willow Garage, Inc.
+ *  Copyright (c) 2011-2014, Willow Garage, Inc.
+ *  Copyright (c) 2014-2015, Open Source Robotics Foundation
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -14,7 +15,7 @@
  *     copyright notice, this list of conditions and the following
  *     disclaimer in the documentation and/or other materials provided
  *     with the distribution.
- *   * Neither the name of Willow Garage, Inc. nor the names of its
+ *   * Neither the name of Open Source Robotics Foundation nor the names of its
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
  *
@@ -54,6 +55,31 @@ namespace fcl
 
 /// @brief Type of narrow phase GJK solver
 enum GJKSolverType {GST_LIBCCD, GST_INDEP};
+
+/// @brief Minimal contact information returned by collision
+struct ContactPoint
+{
+  /// @brief Contact normal, pointing from o1 to o2
+  Vec3f normal;
+
+  /// @brief Contact position, in world space
+  Vec3f pos;
+
+  /// @brief Penetration depth
+  FCL_REAL penetration_depth;
+
+  /// @brief Constructor
+  ContactPoint() : normal(Vec3f()), pos(Vec3f()), penetration_depth(0.0) {}
+
+  /// @brief Constructor
+  ContactPoint(const Vec3f& n_, const Vec3f& p_, FCL_REAL d_) : normal(n_),
+                                                                pos(p_),
+                                                                penetration_depth(d_)
+  {}
+};
+
+/// @brief Return true if _cp1's penentration depth is less than _cp2's.
+bool comparePenDepth(const ContactPoint& _cp1, const ContactPoint& _cp2);
 
 /// @brief Contact information returned by collision
 struct Contact
