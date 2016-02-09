@@ -1,9 +1,30 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.5)
+
+# Use MACOSX_RPATH by default on OS X. This was added in CMake 2.8.12 and
+# became default in CMake 3.0. Explicitly setting this policy is necessary to
+# suppress a warning in CMake 3.0 and above.
+if(POLICY CMP0042)
+  cmake_policy(SET CMP0042 NEW)
+endif()
+
 project(fcl CXX C)
 
 # set the default build type
 if (NOT CMAKE_BUILD_TYPE)
    set(CMAKE_BUILD_TYPE Release)
+endif()
+
+# Set build type variable
+set(FCL_BUILD_TYPE_RELEASE FALSE)
+set(FCL_BUILD_TYPE_DEBUG FALSE)
+
+string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE_UPPERCASE)
+if("${CMAKE_BUILD_TYPE_UPPERCASE}" STREQUAL "RELEASE")
+  set(FCL_BUILD_TYPE_RELEASE TRUE)
+elseif("${CMAKE_BUILD_TYPE_UPPERCASE}" STREQUAL "DEBUG")
+  set(FCL_BUILD_TYPE_DEBUG TRUE)
+else()
+  message(STATUS "CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} unknown. Valid options are: Debug Release")
 endif()
 
 # This shouldn't be necessary, but there has been trouble
@@ -16,6 +37,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules")
 include(CompilerSettings)
 include(FCLVersion)
+include(GNUInstallDirs)
 
 if(MSVC OR IS_ICPC)
   option(FCL_STATIC_LIBRARY "Whether the FCL library should be static rather than shared" ON)
@@ -45,13 +67,13 @@ if(NOT OCTOMAP_FOUND)
     # of octomap
     find_path(OCTOMAP_INCLUDE_DIRS octomap.h
         PATH_SUFFIXES octomap)
-    find_path(OCTOMAP_LIBRARY_DIRS
+    find_library(OCTOMAP_LIBRARY_DIRS
         ${CMAKE_SHARED_LIBRARY_PREFIX}octomap${CMAKE_SHARED_LIBRARY_SUFFIX})
     if(OCTOMAP_INCLUDE_DIRS AND OCTOMAP_LIBRARY_DIRS)
         set(OCTOMAP_LIBRARIES "octomap;octomath")
     endif()
 endif()
-if (OCTOMAP_INCLUDE_DIRS AND OCTOMAP_LIBRARY_DIRS)
+if (OCTOMAP_FOUND OR (OCTOMAP_INCLUDE_DIRS AND OCTOMAP_LIBRARY_DIRS))
   include_directories(${OCTOMAP_INCLUDE_DIRS})
   link_directories(${OCTOMAP_LIBRARY_DIRS})
   set(FCL_HAVE_OCTOMAP 1)
@@ -92,6 +114,7 @@ add_definitions(-DBOOST_TEST_DYN_LINK)
 
 # FCL's own include dir should be at the front of the include path
 include_directories(BEFORE "include")
+include_directories("${CMAKE_CURRENT_BINARY_DIR}/include")
 
 if(PKG_CONFIG_FOUND)
   pkg_check_modules(CCD ccd)
@@ -106,7 +129,7 @@ if(NOT CCD_FOUND)
     # of ccd
     find_path(CCD_INCLUDE_DIRS ccd.h
         PATH_SUFFIXES ccd)
-    find_path(CCD_LIBRARY_DIRS
+    find_library(CCD_LIBRARY_DIRS
         ${CMAKE_SHARED_LIBRARY_PREFIX}ccd${CMAKE_SHARED_LIBRARY_SUFFIX})
     if(CCD_INCLUDE_DIRS AND CCD_LIBRARY_DIRS)
         set(CCD_LIBRARIES "ccd")
@@ -120,16 +143,24 @@ link_directories(${CCD_LIBRARY_DIRS})
 add_subdirectory(include/fcl)
 add_subdirectory(src)
 
-set(pkg_conf_file "${CMAKE_CURRENT_SOURCE_DIR}/fcl.pc")
-configure_file("${pkg_conf_file}.in" "${pkg_conf_file}" @ONLY)
+set(pkg_conf_file_in "${CMAKE_CURRENT_SOURCE_DIR}/fcl.pc.in")
+set(pkg_conf_file_out "${CMAKE_CURRENT_BINARY_DIR}/fcl.pc")
+configure_file("${pkg_conf_file_in}" "${pkg_conf_file_out}" @ONLY)
 
-install(DIRECTORY include/ DESTINATION include
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   FILES_MATCHING PATTERN "*.h" PATTERN "*.hxx"
   PATTERN ".DS_Store" EXCLUDE
 )
 
-install(FILES "${pkg_conf_file}" DESTINATION lib/pkgconfig/ COMPONENT pkgconfig)
+install(FILES "${pkg_conf_file_out}" DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig/ COMPONENT pkgconfig)
 
+# Add uninstall target
+configure_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/cmake_uninstall.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/CMakeModules/cmake_uninstall.cmake"
+  IMMEDIATE @ONLY)
+add_custom_target(uninstall
+  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/CMakeModules/cmake_uninstall.cmake")
 
 enable_testing()
 add_subdirectory(test)

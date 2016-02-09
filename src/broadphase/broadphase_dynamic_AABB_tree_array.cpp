@@ -1,7 +1,8 @@
 /*
  * Software License Agreement (BSD License)
  *
- *  Copyright (c) 2011, Willow Garage, Inc.
+ *  Copyright (c) 2011-2014, Willow Garage, Inc.
+ *  Copyright (c) 2014-2015, Open Source Robotics Foundation
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -14,7 +15,7 @@
  *     copyright notice, this list of conditions and the following
  *     disclaimer in the documentation and/or other materials provided
  *     with the distribution.
- *   * Neither the name of Willow Garage, Inc. nor the names of its
+ *   * Neither the name of Open Source Robotics Foundation nor the names of its
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
  *
@@ -657,6 +658,8 @@ bool distanceRecurse(DynamicAABBTreeCollisionManager_Array::DynamicAABBNode* nod
 
 void DynamicAABBTreeCollisionManager_Array::registerObjects(const std::vector<CollisionObject*>& other_objs)
 {
+  if(other_objs.empty()) return;
+
   if(size() > 0)
   {
     BroadPhaseCollisionManager::registerObjects(other_objs);
@@ -771,7 +774,7 @@ void DynamicAABBTreeCollisionManager_Array::collide(CollisionObject* obj, void* 
     {
       if(!octree_as_geometry_collide)
       {
-        const OcTree* octree = static_cast<const OcTree*>(obj->getCollisionGeometry());
+        const OcTree* octree = static_cast<const OcTree*>(obj->collisionGeometry().get());
         details::dynamic_AABB_tree_array::collisionRecurse(dtree.getNodes(), dtree.getRoot(), octree, octree->getRoot(), octree->getRootBV(), obj->getTransform(), cdata, callback); 
       }
       else
@@ -795,7 +798,7 @@ void DynamicAABBTreeCollisionManager_Array::distance(CollisionObject* obj, void*
     {
       if(!octree_as_geometry_distance)
       {
-        const OcTree* octree = static_cast<const OcTree*>(obj->getCollisionGeometry());
+        const OcTree* octree = static_cast<const OcTree*>(obj->collisionGeometry().get());
         details::dynamic_AABB_tree_array::distanceRecurse(dtree.getNodes(), dtree.getRoot(), octree, octree->getRoot(), octree->getRootBV(), obj->getTransform(), cdata, callback, min_dist);
       }
       else

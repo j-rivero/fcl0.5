@@ -1,7 +1,8 @@
 /*
  * Software License Agreement (BSD License)
  *
- *  Copyright (c) 2011, Willow Garage, Inc.
+ *  Copyright (c) 2011-2014, Willow Garage, Inc.
+ *  Copyright (c) 2014-2015, Open Source Robotics Foundation
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -14,7 +15,7 @@
  *     copyright notice, this list of conditions and the following
  *     disclaimer in the documentation and/or other materials provided
  *     with the distribution.
- *   * Neither the name of Willow Garage, Inc. nor the names of its
+ *   * Neither the name of Open Source Robotics Foundation nor the names of its
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
  *
@@ -51,6 +52,7 @@ namespace details
 /// @brief get the vertices of some convex shape which can bound the given shape in a specific configuration
 std::vector<Vec3f> getBoundVertices(const Box& box, const Transform3f& tf);
 std::vector<Vec3f> getBoundVertices(const Sphere& sphere, const Transform3f& tf);
+std::vector<Vec3f> getBoundVertices(const Ellipsoid& ellipsoid, const Transform3f& tf);
 std::vector<Vec3f> getBoundVertices(const Capsule& capsule, const Transform3f& tf);
 std::vector<Vec3f> getBoundVertices(const Cone& cone, const Transform3f& tf);
 std::vector<Vec3f> getBoundVertices(const Cylinder& cylinder, const Transform3f& tf);
@@ -73,6 +75,9 @@ void computeBV<AABB, Box>(const Box& s, const Transform3f& tf, AABB& bv);
 
 template<>
 void computeBV<AABB, Sphere>(const Sphere& s, const Transform3f& tf, AABB& bv);
+
+template<>
+void computeBV<AABB, Ellipsoid>(const Ellipsoid& s, const Transform3f& tf, AABB& bv);
 
 template<>
 void computeBV<AABB, Capsule>(const Capsule& s, const Transform3f& tf, AABB& bv);
@@ -104,6 +109,9 @@ template<>
 void computeBV<OBB, Sphere>(const Sphere& s, const Transform3f& tf, OBB& bv);
 
 template<>
+void computeBV<OBB, Ellipsoid>(const Ellipsoid& s, const Transform3f& tf, OBB& bv);
+
+template<>
 void computeBV<OBB, Capsule>(const Capsule& s, const Transform3f& tf, OBB& bv);
 
 template<>
@@ -119,8 +127,25 @@ template<>
 void computeBV<OBB, Halfspace>(const Halfspace& s, const Transform3f& tf, OBB& bv);
 
 template<>
-void computeBV<OBB, Plane>(const Plane& s, const Transform3f& tf, OBB& bv);
+void computeBV<RSS, Halfspace>(const Halfspace& s, const Transform3f& tf, RSS& bv);
 
+template<>
+void computeBV<OBBRSS, Halfspace>(const Halfspace& s, const Transform3f& tf, OBBRSS& bv);
+
+template<>
+void computeBV<kIOS, Halfspace>(const Halfspace& s, const Transform3f& tf, kIOS& bv);
+
+template<>
+void computeBV<KDOP<16>, Halfspace>(const Halfspace& s, const Transform3f& tf, KDOP<16>& bv);
+
+template<>
+void computeBV<KDOP<18>, Halfspace>(const Halfspace& s, const Transform3f& tf, KDOP<18>& bv);
+
+template<>
+void computeBV<KDOP<24>, Halfspace>(const Halfspace& s, const Transform3f& tf, KDOP<24>& bv);
+
+template<>
+void computeBV<OBB, Plane>(const Plane& s, const Transform3f& tf, OBB& bv);
 
 template<>
 void computeBV<RSS, Plane>(const Plane& s, const Transform3f& tf, RSS& bv);
