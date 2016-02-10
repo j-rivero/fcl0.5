@@ -21,7 +21,7 @@ Vcs-Git: git://anonscm.debian.org/debian-science/packages/fcl.git
 Homepage: http://gamma.cs.unc.edu/FCL/
 XS-Testsuite: autopkgtest
 
-Package: libfcl0
+Package: libfcl0.4
 Section: libs
 Architecture: any
 Pre-Depends: ${misc:Pre-Depends}
@@ -48,7 +48,7 @@ Depends: pkg-config,
          libccd-dev,
          libtinyxml-dev,
          libflann-dev,
-	 libfcl0 (= ${binary:Version}),
+	 libfcl0.4 (= ${binary:Version}),
 	 ${misc:Depends}
 Description: Flexible Collision Library - development files
  FCL is a collision and proximity library that integrates several techniques for
@@ -60,11 +60,11 @@ Description: Flexible Collision Library - development files
  models may correspond to triangulated rigid or deformable models and
  articulated models.
 
-Package: libfcl0-dbg
+Package: libfcl0.4-dbg
 Architecture: any
 Section: debug
 Priority: extra
-Depends: libfcl0 (= ${binary:Version}),
+Depends: libfcl0.4 (= ${binary:Version}),
          ${misc:Depends}
 Description: Flexible Collision Library - debug files
  FCL is a collision and proximity library that integrates several techniques for
