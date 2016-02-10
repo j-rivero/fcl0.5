@@ -2,7 +2,7 @@ fcl (0.4.0-1) unstable; urgency=medium
 
   * Imported Upstream version 0.4.0
   * Enable testing
-  * Arch dependant paths for libraries
+  * GNUInstallPaths for libraries
   * Update patches
   * Update packages to 0.4 SOVERSION
 
