@@ -1,13 +1,10 @@
-diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index 33cb7fa..fbabd22 100644
---- a/src/CMakeLists.txt
-+++ b/src/CMakeLists.txt
-@@ -3,6 +3,8 @@ if(FCL_STATIC_LIBRARY)
-   add_library(${PROJECT_NAME} STATIC ${FCL_SOURCE_CODE})
- else()
-   add_library(${PROJECT_NAME} SHARED ${FCL_SOURCE_CODE})
-+  set_target_properties(${PROJECT_NAME} PROPERTIES
-+      SOVERSION 0)
- endif()
+diff --git a/CMakeModules/FCLVersion.cmake b/CMakeModules/FCLVersion.cmake
+index 508259a..0a9735b 100644
+--- a/CMakeModules/FCLVersion.cmake
++++ b/CMakeModules/FCLVersion.cmake
+@@ -5,4 +5,4 @@ set(FCL_PATCH_VERSION 0)
+ set(FCL_VERSION "${FCL_MAJOR_VERSION}.${FCL_MINOR_VERSION}.${FCL_PATCH_VERSION}")
  
- target_link_libraries(${PROJECT_NAME} ${CCD_LIBRARIES} ${OCTOMAP_LIBRARIES} ${Boost_LIBRARIES})
+ # increment this when we have ABI changes
+-set(FCL_ABI_VERSION 6)
++set(FCL_ABI_VERSION 0.4)
