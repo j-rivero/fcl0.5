@@ -13,8 +13,5 @@ override_dh_auto_configure:
 override_dh_strip:
 	dh_strip -a --dbg-package=libfcl0-dbg
 
-override_dh_auto_test:
-	true
-
 %:
 	dh $@ --parallel --buildsystem=cmake
