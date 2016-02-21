@@ -1,5 +1,4 @@
-diff --git a/CMakeModules/FCLVersion.cmake b/CMakeModules/FCLVersion.cmake
-index 508259a..0a9735b 100644
+Description: define proper soname
 --- a/CMakeModules/FCLVersion.cmake
 +++ b/CMakeModules/FCLVersion.cmake
 @@ -5,4 +5,4 @@ set(FCL_PATCH_VERSION 0)

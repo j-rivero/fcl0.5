@@ -1,5 +1,4 @@
-diff --git a/CMakeModules/CompilerSettings.cmake b/CMakeModules/CompilerSettings.cmake
-index d855af0..461baae 100644
+Description: no rpath in libs
 --- a/CMakeModules/CompilerSettings.cmake
 +++ b/CMakeModules/CompilerSettings.cmake
 @@ -44,7 +44,7 @@ endif((CMAKE_COMPILER_IS_GNUCXX OR IS_ICPC) AND NOT MINGW)

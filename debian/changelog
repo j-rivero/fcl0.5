@@ -1,10 +1,14 @@
 fcl (0.4.0-1) unstable; urgency=medium
 
+  [ Jose Luis Rivero ]
   * Imported Upstream version 0.4.0
   * Enable testing
   * GNUInstallPaths for libraries
   * Update patches
   * Update packages to 0.4 SOVERSION
+
+  [ Anton Gladky ]
+  * Apply "cme fix dpkg"
 
  -- Jose Luis Rivero <jrivero@osrfoundation.org>  Wed, 10 Feb 2016 00:23:36 +0000
 
