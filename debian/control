@@ -8,14 +8,12 @@ Priority: optional
 Build-Depends: debhelper (>= 9),
                cmake,
                pkg-config,
-               libboost-date-time-dev,
                libboost-filesystem-dev,
-               libboost-system-dev,
-               libboost-thread-dev,
                libboost-test-dev,
                libccd-dev,
                libtinyxml-dev,
-               libflann-dev
+               libflann-dev,
+               liboctomap-dev
 Standards-Version: 3.9.7
 Vcs-Browser: https://anonscm.debian.org/cgit/debian-science/packages/fcl.git
 Vcs-Git: https://anonscm.debian.org/git/debian-science/packages/fcl.git
@@ -41,14 +39,12 @@ Package: libfcl-dev
 Architecture: any
 Section: libdevel
 Depends: pkg-config,
-         libboost-date-time-dev,
          libboost-filesystem-dev,
-         libboost-system-dev,
-         libboost-thread-dev,
          libboost-test-dev,
          libccd-dev,
          libtinyxml-dev,
          libflann-dev,
+         liboctomap-dev,
          libfcl0.5 (= ${binary:Version}),
          ${misc:Depends}
 Description: Flexible Collision Library - development files
