@@ -2,7 +2,7 @@
  * Software License Agreement (BSD License)
  *
  *  Copyright (c) 2011-2014, Willow Garage, Inc.
- *  Copyright (c) 2014-2015, Open Source Robotics Foundation
+ *  Copyright (c) 2014-2016, Open Source Robotics Foundation
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,7 @@
 #define FCL_TRANSFORM_H
 
 #include "fcl/math/matrix_3f.h"
-#include <boost/thread/mutex.hpp>
+#include <mutex>
 
 namespace fcl
 {
@@ -182,7 +182,7 @@ static inline std::ostream& operator << (std::ostream& o, const Quaternion3f& q)
 /// @brief Simple transform class used locally by InterpMotion
 class Transform3f
 {
-  boost::mutex lock_;
+  std::mutex lock_;
 
   /// @brief Whether matrix cache is set
   mutable bool matrix_set;

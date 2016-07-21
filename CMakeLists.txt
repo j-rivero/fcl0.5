@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.5)
+cmake_minimum_required(VERSION 2.8.12)
 
 # Use MACOSX_RPATH by default on OS X. This was added in CMake 2.8.12 and
 # became default in CMake 3.0. Explicitly setting this policy is necessary to
@@ -56,40 +56,48 @@ if(FCL_USE_SSE)
   # TODO: do something similar for other compilers
 endif()
 
-# Find Octomap (optional)
-find_package(PkgConfig QUIET)
-set(FCL_HAVE_OCTOMAP 0)
-if(PKG_CONFIG_FOUND)
-    pkg_check_modules(OCTOMAP QUIET octomap)
-endif()
-if(NOT OCTOMAP_FOUND)
-    # if pkfconfig is not installed, then fall back on more fragile detection
-    # of octomap
-    find_path(OCTOMAP_INCLUDE_DIRS octomap.h
-        PATH_SUFFIXES octomap)
-    find_library(OCTOMAP_LIBRARY_DIRS
-        ${CMAKE_SHARED_LIBRARY_PREFIX}octomap${CMAKE_SHARED_LIBRARY_SUFFIX})
-    if(OCTOMAP_INCLUDE_DIRS AND OCTOMAP_LIBRARY_DIRS)
-        set(OCTOMAP_LIBRARIES "octomap;octomath")
-    endif()
-endif()
-if (OCTOMAP_FOUND OR (OCTOMAP_INCLUDE_DIRS AND OCTOMAP_LIBRARY_DIRS))
-  include_directories(${OCTOMAP_INCLUDE_DIRS})
-  link_directories(${OCTOMAP_LIBRARY_DIRS})
-  set(FCL_HAVE_OCTOMAP 1)
-  message(STATUS "FCL uses Octomap")
-else()
-  message(STATUS "FCL does not use Octomap")
+# Coveralls support
+option(FCL_COVERALLS "Turn on coveralls support" OFF)
+option(FCL_COVERALLS_UPLOAD "Upload the generated coveralls json" ON)
+if(FCL_COVERALLS)
+  include(Coveralls)
+  coveralls_turn_on_coverage()
 endif()
 
-# Find FLANN (optional)
-find_package(flann QUIET)
-if (FLANN_FOUND)
-  set(FCL_HAVE_FLANN 1)
-  include_directories(${FLANN_INCLUDE_DIRS})
-  message(STATUS "FCL uses Flann")
+# Find Octomap (optional)
+find_package(PkgConfig QUIET)
+
+option(FCL_WITH_OCTOMAP "octomap library support" ON)
+set(FCL_HAVE_OCTOMAP 0)
+if(FCL_WITH_OCTOMAP)
+  if(PKG_CONFIG_FOUND)
+      pkg_check_modules(OCTOMAP QUIET octomap)
+  endif()
+  if(NOT OCTOMAP_FOUND)
+      # if pkgconfig is not installed, then fall back on more fragile detection
+      # of octomap
+      find_path(OCTOMAP_INCLUDE_DIRS octomap.h
+          PATH_SUFFIXES octomap)
+      find_library(OCTOMAP_LIBRARY_DIRS
+          ${CMAKE_SHARED_LIBRARY_PREFIX}octomap${CMAKE_SHARED_LIBRARY_SUFFIX})
+      if(OCTOMAP_INCLUDE_DIRS AND OCTOMAP_LIBRARY_DIRS)
+          set(OCTOMAP_LIBRARIES "octomap;octomath")
+      endif()
+  endif()
+  if (OCTOMAP_FOUND OR (OCTOMAP_INCLUDE_DIRS AND OCTOMAP_LIBRARY_DIRS))
+    string(REPLACE "." ";" VERSION_LIST ${OCTOMAP_VERSION})
+    list(GET VERSION_LIST 0 OCTOMAP_MAJOR_VERSION)
+    list(GET VERSION_LIST 1 OCTOMAP_MINOR_VERSION)
+    list(GET VERSION_LIST 2 OCTOMAP_PATCH_VERSION)
+    include_directories(${OCTOMAP_INCLUDE_DIRS})
+    link_directories(${OCTOMAP_LIBRARY_DIRS})
+    set(FCL_HAVE_OCTOMAP 1)
+    message(STATUS "FCL uses Octomap")
+  else()
+    message(STATUS "FCL does not use Octomap")
+  endif()
 else()
-  message(STATUS "FCL does not use Flann")
+  message(STATUS "FCL does not use Octomap (as requested)")
 endif()
 
 
@@ -104,14 +112,6 @@ endif()
 # endif()
 
 
-find_package(Boost COMPONENTS thread date_time filesystem system unit_test_framework REQUIRED)
-include_directories(${Boost_INCLUDE_DIR})
-
-if(MSVC)
-    add_definitions(-DBOOST_ALL_NO_LIB)
-endif()
-add_definitions(-DBOOST_TEST_DYN_LINK)
-
 # FCL's own include dir should be at the front of the include path
 include_directories(BEFORE "include")
 include_directories("${CMAKE_CURRENT_BINARY_DIR}/include")
@@ -125,14 +125,13 @@ if(PKG_CONFIG_FOUND)
 endif()
 
 if(NOT CCD_FOUND)
-    # if pkfconfig is not installed, then fall back on more fragile detection
+    # if pkgconfig is not installed, then fall back on more fragile detection
     # of ccd
-    find_path(CCD_INCLUDE_DIRS ccd.h
-        PATH_SUFFIXES ccd)
-    find_library(CCD_LIBRARY_DIRS
+    find_path(CCD_INCLUDE_DIRS ccd/ccd.h)
+    find_library(CCD_LIBRARY
         ${CMAKE_SHARED_LIBRARY_PREFIX}ccd${CMAKE_SHARED_LIBRARY_SUFFIX})
-    if(CCD_INCLUDE_DIRS AND CCD_LIBRARY_DIRS)
-        set(CCD_LIBRARIES "ccd")
+    if(CCD_INCLUDE_DIRS AND CCD_LIBRARY)
+        set(CCD_LIBRARIES "${CCD_LIBRARY}")
     else()
         message(FATAL_ERROR "Libccd is required by FCL")
     endif()
@@ -145,6 +144,9 @@ add_subdirectory(src)
 
 set(pkg_conf_file_in "${CMAKE_CURRENT_SOURCE_DIR}/fcl.pc.in")
 set(pkg_conf_file_out "${CMAKE_CURRENT_BINARY_DIR}/fcl.pc")
+if(NOT MSVC)
+    set(PKG_CFLAGS "-std=c++11")
+endif()
 configure_file("${pkg_conf_file_in}" "${pkg_conf_file_out}" @ONLY)
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
@@ -162,5 +164,9 @@ configure_file(
 add_custom_target(uninstall
   "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/CMakeModules/cmake_uninstall.cmake")
 
-enable_testing()
-add_subdirectory(test)
+find_package(Boost COMPONENTS date_time filesystem system unit_test_framework)
+option(FCL_BUILD_TESTS "Build FCL tests" ${Boost_FOUND})
+if(FCL_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(test)
+endif()

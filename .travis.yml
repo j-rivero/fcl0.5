@@ -1,3 +1,8 @@
+sudo: required
+dist: trusty
+cache:
+  apt: true
+
 language: cpp
 
 os:
@@ -9,13 +14,18 @@ compiler:
   - clang
 
 env:
-  - BUILD_TYPE=Debug
-  - BUILD_TYPE=Release
+  - BUILD_TYPE=Debug   COVERALLS=ON
+  - BUILD_TYPE=Release COVERALLS=OFF
 
 matrix:
   exclude:
     - os: osx
       compiler: gcc
+
+addons:
+  apt:
+    packages:
+      - libboost-all-dev
 
 install:
   # Install dependencies for FCL
@@ -28,10 +38,11 @@ script:
   - cd build 
 
   # Configure
-  - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
+  - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DFCL_COVERALLS=$COVERALLS ..
 
   # Build
   - make -j4
+  - if [ $COVERALLS = ON ] && [ "$TRAVIS_OS_NAME" = "linux" ]; then make coveralls; fi
 
   # Run unit tests
   - make test

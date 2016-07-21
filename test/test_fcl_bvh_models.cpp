@@ -1,7 +1,7 @@
 /*
  * Software License Agreement (BSD License)
  *
- *  Copyright (c) 2015, Open Source Robotics Foundation
+ *  Copyright (c) 2016, Open Source Robotics Foundation
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -50,7 +50,7 @@ using namespace fcl;
 template<typename BV>
 void testBVHModelPointCloud()
 {
-  boost::shared_ptr<BVHModel<BV> > model(new BVHModel<BV>);
+  std::shared_ptr<BVHModel<BV> > model(new BVHModel<BV>);
 
   if (model->getNodeType() != BV_AABB
       && model->getNodeType() != BV_KDOP16
@@ -101,7 +101,7 @@ void testBVHModelPointCloud()
 template<typename BV>
 void testBVHModelTriangles()
 {
-  boost::shared_ptr<BVHModel<BV> > model(new BVHModel<BV>);
+  std::shared_ptr<BVHModel<BV> > model(new BVHModel<BV>);
   Box box;
 
   double a = box.side[0];
@@ -155,7 +155,7 @@ void testBVHModelTriangles()
 template<typename BV>
 void testBVHModelSubModel()
 {
-  boost::shared_ptr<BVHModel<BV> > model(new BVHModel<BV>);
+  std::shared_ptr<BVHModel<BV> > model(new BVHModel<BV>);
   Box box;
 
   double a = box.side[0];
