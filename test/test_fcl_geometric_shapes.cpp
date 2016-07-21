@@ -2,7 +2,7 @@
  * Software License Agreement (BSD License)
  *
  *  Copyright (c) 2011-2014, Willow Garage, Inc.
- *  Copyright (c) 2014-2015, Open Source Robotics Foundation
+ *  Copyright (c) 2014-2016, Open Source Robotics Foundation
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE(sphere_shape)
 {
   const double tol = 1e-12;
   const double radius = 5.0;
-  const double pi = boost::math::constants::pi<FCL_REAL>();
+  const double pi = constants::pi;
 
   Sphere s(radius);
 
@@ -177,7 +177,7 @@ void printComparisonError(const std::string& comparison_type,
             << "tf2.translation: " << tf2.getTranslation() << std::endl
             << "expected_depth: " << expected_depth << std::endl
             << "actual_depth  : " << actual_depth << std::endl
-            << "difference: " << std::fabs(actual_depth - expected_depth) << std::endl
+            << "difference: " << std::abs(actual_depth - expected_depth) << std::endl
             << "tolerance: " << tol << std::endl;
 }
 
@@ -201,7 +201,7 @@ bool checkContactPoints(const S1& s1, const Transform3f& tf1,
 
   if (check_depth)
   {
-    bool depth_equal = std::fabs(actual.penetration_depth - expected.penetration_depth) < tol;
+    bool depth_equal = std::abs(actual.penetration_depth - expected.penetration_depth) < tol;
     if (!depth_equal)
       return false;
   }

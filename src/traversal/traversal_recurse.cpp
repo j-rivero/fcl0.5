@@ -2,7 +2,7 @@
  * Software License Agreement (BSD License)
  *
  *  Copyright (c) 2011-2014, Willow Garage, Inc.
- *  Copyright (c) 2014-2015, Open Source Robotics Foundation
+ *  Copyright (c) 2014-2016, Open Source Robotics Foundation
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -414,7 +414,7 @@ void propagateBVHFrontListCollisionRecurse(CollisionTraversalNodeBase* node, BVH
         if(node->firstOverSecond(b1, b2))
         {
           int c1 = node->getFirstLeftChild(b1);
-          int c2 = node->getFirstRightChild(b2);
+          int c2 = node->getFirstRightChild(b1);
 
           collisionRecurse(node, c1, b2, front_list);
           collisionRecurse(node, c2, b2, front_list);

@@ -2,7 +2,7 @@
  * Software License Agreement (BSD License)
  *
  *  Copyright (c) 2011-2014, Willow Garage, Inc.
- *  Copyright (c) 2014-2015, Open Source Robotics Foundation
+ *  Copyright (c) 2014-2016, Open Source Robotics Foundation
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -39,16 +39,16 @@
 #define FCL_DATA_TYPES_H
 
 #include <cstddef>
-#include <boost/cstdint.hpp>
+#include <cstdint>
 
 namespace fcl
 {
 
 typedef double FCL_REAL;
-typedef boost::uint64_t FCL_INT64;
-typedef boost::int64_t FCL_UINT64;
-typedef boost::uint32_t FCL_UINT32;
-typedef boost::int32_t FCL_INT32;
+typedef std::int64_t  FCL_INT64;
+typedef std::uint64_t FCL_UINT64;
+typedef std::int32_t  FCL_INT32;
+typedef std::uint32_t FCL_UINT32;
 
 /// @brief Triangle with 3 indices for points
 class Triangle

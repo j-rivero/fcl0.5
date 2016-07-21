@@ -2,7 +2,7 @@
  * Software License Agreement (BSD License)
  *
  *  Copyright (c) 2011-2014, Willow Garage, Inc.
- *  Copyright (c) 2014-2015, Open Source Robotics Foundation
+ *  Copyright (c) 2014-2016, Open Source Robotics Foundation
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -164,7 +164,7 @@ BOOST_AUTO_TEST_CASE(OBB_shape_test)
       computeBV(ellipsoid, transforms[i], obb2);
 
       bool overlap_obb = obb1.overlap(obb2);
-      bool overlap_ellipsoid = solver.shapeIntersect(box1, box1_tf, ellipsoid, transforms[i], NULL, NULL, NULL);
+      bool overlap_ellipsoid = solver.shapeIntersect(box1, box1_tf, ellipsoid, transforms[i], NULL);
       BOOST_CHECK(overlap_obb >= overlap_ellipsoid);
     }
 

@@ -2,7 +2,7 @@
  * Software License Agreement (BSD License)
  *
  *  Copyright (c) 2011-2014, Willow Garage, Inc.
- *  Copyright (c) 2014-2015, Open Source Robotics Foundation
+ *  Copyright (c) 2014-2016, Open Source Robotics Foundation
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -47,7 +47,6 @@ namespace fcl
 
 /// @brief Interval trees implemented using red-black-trees as described in
 /// the book Introduction_To_Algorithms_ by Cormen, Leisserson, and Rivest.
-/// Can be replaced in part by boost::icl::interval_set, which is only supported after boost 1.46 and does not support delete node routine.
 struct SimpleInterval
 {
 public:

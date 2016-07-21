@@ -2,7 +2,7 @@
  * Software License Agreement (BSD License)
  *
  *  Copyright (c) 2011-2014, Willow Garage, Inc.
- *  Copyright (c) 2014-2015, Open Source Robotics Foundation
+ *  Copyright (c) 2014-2016, Open Source Robotics Foundation
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,6 @@
 #include "fcl/narrowphase/narrowphase.h"
 #include "fcl/shape/geometric_shapes_utility.h"
 #include "fcl/intersect.h"
-#include <boost/math/constants/constants.hpp>
 #include <vector>
 
 namespace fcl
@@ -96,7 +95,7 @@ namespace details
 	// If segments not parallel, compute closest point on L1 to L2 and
 	// clamp to segment S1. Else pick arbitrary s (here 0)
 	if (denom != 0.0f) {
-	  std::cerr << "demoninator equals zero, using 0 as reference" << std::endl;
+	  std::cerr << "denominator equals zero, using 0 as reference" << std::endl;
 	  s = clamp((b*f - c*e) / denom, 0.0f, 1.0f);
 	} else s = 0.0f;
 	// Compute point on L2 closest to S1(s) using
@@ -871,7 +870,7 @@ static inline void cullPoints2(int n, FCL_REAL p[], int m, int i0, int iret[])
   avail[i0] = 0;
   iret[0] = i0;
   iret++;
-  const double pi = boost::math::constants::pi<FCL_REAL>();
+  const double pi = constants::pi;
   for(int j = 1; j < m; ++j) 
   {
     a = j*(2*pi/m) + A[i0];

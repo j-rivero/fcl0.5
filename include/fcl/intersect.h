@@ -2,7 +2,7 @@
  * Software License Agreement (BSD License)
  *
  *  Copyright (c) 2011-2014, Willow Garage, Inc.
- *  Copyright (c) 2014-2015, Open Source Robotics Foundation
+ *  Copyright (c) 2014-2016, Open Source Robotics Foundation
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -39,7 +39,6 @@
 #define FCL_INTERSECT_H
 
 #include "fcl/math/transform.h"
-#include <boost/math/special_functions/erf.hpp>
 
 namespace fcl
 {
@@ -237,7 +236,7 @@ private:
   /// @brief compute the cdf(x) 
   static FCL_REAL gaussianCDF(FCL_REAL x)
   {
-    return 0.5 * boost::math::erfc(-x / sqrt(2.0));
+    return 0.5 * std::erfc(-x / sqrt(2.0));
   }
 
 

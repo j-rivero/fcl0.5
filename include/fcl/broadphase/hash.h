@@ -2,7 +2,7 @@
  * Software License Agreement (BSD License)
  *
  *  Copyright (c) 2011-2014, Willow Garage, Inc.
- *  Copyright (c) 2014-2015, Open Source Robotics Foundation
+ *  Copyright (c) 2014-2016, Open Source Robotics Foundation
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -42,7 +42,7 @@
 #include <set>
 #include <vector>
 #include <list>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 namespace fcl
 {
@@ -123,7 +123,7 @@ public:
 
 
 template<typename U, typename V>
-class unordered_map_hash_table : public boost::unordered_map<U, V> {};
+class unordered_map_hash_table : public std::unordered_map<U, V> {};
 
 /// @brief A hash table implemented using unordered_map
 template<typename Key, typename Data, typename HashFnc, template<typename, typename> class TableT = unordered_map_hash_table>

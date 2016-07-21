@@ -2,7 +2,7 @@
  * Software License Agreement (BSD License)
  *
  *  Copyright (c) 2011-2014, Willow Garage, Inc.
- *  Copyright (c) 2014-2015, Open Source Robotics Foundation
+ *  Copyright (c) 2014-2016, Open Source Robotics Foundation
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -45,7 +45,6 @@ namespace fcl
 
 template<typename BV>
 BVHModel<BV>::BVHModel(const BVHModel<BV>& other) : CollisionGeometry(other),
-                                                    boost::noncopyable(),
                                                     num_tris(other.num_tris),
                                                     num_vertices(other.num_vertices),
                                                     build_state(other.build_state),
