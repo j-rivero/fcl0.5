@@ -9,7 +9,6 @@ ifeq ($(DEB_HOST_ARCH),amd64)
 endif
 
 .PHONY: override_dh_auto_configure   \
-        override_dh_auto_test \
         override_dh_strip
 
 override_dh_auto_configure:
