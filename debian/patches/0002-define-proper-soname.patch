@@ -1,0 +1,10 @@
+diff --git a/CMakeModules/FCLVersion.cmake b/CMakeModules/FCLVersion.cmake
+index 0da9ffe..0b535e7 100644
+--- a/CMakeModules/FCLVersion.cmake
++++ b/CMakeModules/FCLVersion.cmake
+@@ -5,4 +5,4 @@ set(FCL_PATCH_VERSION 0)
+ set(FCL_VERSION "${FCL_MAJOR_VERSION}.${FCL_MINOR_VERSION}.${FCL_PATCH_VERSION}")
+ 
+ # increment this when we have ABI changes
+-set(FCL_ABI_VERSION 7)
++set(FCL_ABI_VERSION ${FCL_MAJOR_VERSION}.${FCL_MINOR_VERSION})
