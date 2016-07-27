@@ -1,2 +1,2 @@
 Tests: build
-Depends: libfcl-dev, build-essential
+Depends: libfcl-0.5-dev, build-essential
