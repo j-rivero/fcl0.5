@@ -47,6 +47,7 @@ Depends: pkg-config,
          liboctomap-dev,
          libfcl0.5 (= ${binary:Version}),
          ${misc:Depends}
+Conflicts: libfcl-dev
 Description: Flexible Collision Library - development files
  FCL is a collision and proximity library that integrates several techniques for
  fast and accurate collision checking and proximity computation. Tje library is
