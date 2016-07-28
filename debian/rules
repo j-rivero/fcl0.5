@@ -24,7 +24,7 @@ override_dh_strip:
 	dh_strip -a --dbg-package=libfcl0.5-dbg
 
 override_dh_auto_test:
-ifeq ($(DEB_HOST_ARCH),i386)
+ifneq ($(DEB_HOST_ARCH),amd64)
 	true
 else
 	dh_auto_test
