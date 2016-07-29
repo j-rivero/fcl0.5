@@ -9,16 +9,24 @@ ifeq ($(DEB_HOST_ARCH),amd64)
 endif
 
 .PHONY: override_dh_auto_configure   \
+        override_dh_auto_build \
         override_dh_auto_test \
         override_dh_strip
 
 override_dh_auto_configure:
+	# Pull in ROS and Gazebo configuration
+	. "/opt/ros/kinetic/setup.sh" && \
 	dh_auto_configure --  \
 	    -DCMAKE_INSTALL_PREFIX:PATH=/usr \
 	    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
 	    -DFCL_WITH_OCTOMAP=True \
 	    -DFCL_BUILD_TESTS=True \
 	    -DFCL_USE_SSE="${SSE_ENABLED}"
+
+override_dh_auto_build:
+	. "/opt/ros/kinetic/setup.sh" && \
+	rosdep update && \
+	dh_auto_build -- VERBOSE=1
 
 override_dh_strip:
 	dh_strip -a --dbg-package=libfcl0.5-dbg
