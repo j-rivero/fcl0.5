@@ -41,7 +41,7 @@ endif
 
 override_dh_shlibdeps:
 	. "/opt/ros/kinetic/setup.sh" && \
-	dh_auto_shlibdeps
+	dh_shlibdeps
 
 %:
 	dh $@ --parallel --buildsystem=cmake
