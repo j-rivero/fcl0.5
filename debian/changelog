@@ -1,3 +1,9 @@
+fcl (0.5.0-3) unstable; urgency=medium
+
+  * Use only a custom set of SSE flags
+
+ -- Jose Luis Rivero <jrivero@osrfoundation.org>  Sat, 12 Nov 2016 18:38:53 +0100
+
 fcl (0.5.0-2) unstable; urgency=medium
 
   * Disabling SSE detection on amd64 (really means march=native)
